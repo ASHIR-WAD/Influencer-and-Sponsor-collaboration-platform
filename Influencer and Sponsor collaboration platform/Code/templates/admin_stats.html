@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find</title>
+    <link rel="stylesheet" href="/static/dash.css">
+    <style>
+        img {
+            display: block;
+            max-height: 40vh;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .img-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .img-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .img-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        .img5 {
+            grid-column: 1 / -1;
+            justify-self: center;
+           
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            transform: scale(1.3);
+            transition: transform 0.3s ease;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Admin's Dashboard</h1>
+            <nav>
+                <a href="/adminhome"><button>Info</button></a>
+                <a href="/adminfind"><button>Find</button></a>
+                <a href="/adminstatistics"><button>Stats</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <div class="img-container img1">
+                <div class="img-title">Influencers by Platform</div>
+                <img src="data:image/png;base64,{{ img1 }}" alt="Influencers by Platform">
+            </div>
+            <div class="img-container img2">
+                <div class="img-title">Flagged vs Unflagged Users</div>
+                <img src="data:image/png;base64,{{ img2 }}" alt="Flagged vs Unflagged Users">
+            </div>
+            <div class="img-container img3">
+                <div class="img-title">Total Campaigns, Sponsors, and Influencers</div>
+                <img src="data:image/png;base64,{{ img3 }}" alt="Total Campaigns, Sponsors, and Influencers">
+            </div>
+            <div class="img-container img4">
+                <div class="img-title">Budget Histogram</div>
+                <img src="data:image/png;base64,{{ img4 }}" alt="Budget Histogram">
+            </div>
+            <div class="img-container img5">
+                <div class="img-title">Reach Histogram</div>
+                <img src="data:image/png;base64,{{ img5 }}" alt="Reach Histogram">
+            </div>
+        </main>
+    </div>
+
+    <div class="popup-overlay">
+        <div class="popup-content"></div>
+    </div>
+
+    <script>
+        const imgContainers = document.querySelectorAll('.img-container');
+        const popupOverlay = document.querySelector('.popup-overlay');
+        const popupContent = document.querySelector('.popup-content');
+
+        imgContainers.forEach(container => {
+            container.addEventListener('click', () => {
+                const clone = container.cloneNode(true);
+                popupContent.innerHTML = '';
+                popupContent.appendChild(clone);
+                popupOverlay.style.display = 'flex';
+            });
+        });
+
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                popupOverlay.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

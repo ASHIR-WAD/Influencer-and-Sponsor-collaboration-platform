@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find</title>
+    <link rel="stylesheet" href="/static/dash.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Influencer's Dashboard</h1>
+            <nav>
+                <a href="/imain"><button>Info</button></a>
+                <a href="/ifind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome {{user.iname}}</h2>
+            <div class="searchbar">
+                <a href="/search_sponsor"><button class="searchbar">Search Here</button></a>
+            </div>
+    <br>
+            <div class="viewpoint">
+            <h3>All Campaigns</h3>
+                <table>
+                {%for c in camp %}
+                    <tr>
+                        <td>
+                            <div class="list">
+                                <span>{{c.cname}}</span>
+                                <div style="display: inline-flex;">
+                                    <button class="viewopen" data-popup-id="popup-camp-{{ c.campaignid }}">View</button>
+                                    <form action="/request" method="post">
+                                        <button class="req" type="submit" name="status" value="requested,{{user.inid}},{{c.campaignid}},i">Request</button>
+                                </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {%endfor%}
+                </table>
+            </div>
+</main>
+</div>
+
+<!-- ppop content -->
+
+{% for c in camp %}
+    <div class="popup" id="popup-camp-{{ c.campaignid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-camp-{{ c.campaignid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Campaign ID: {{ c.campaignid }} <br>
+                Campaign Name: {{ c.cname }} <br>
+                Sponsor's Username: {{ c.sname }} <br>
+                
+                Budget: {{ c.budget }} <br>
+                Description: {{ c.desc }} <br>
+                Start Date: {{ c.startdate }} <br>
+                End Date: {{ c.enddate }} <br>
+                
+                Job Type: {{ c.job }} <br>
+            </p>
+            </div>
+    </div>
+    {% endfor %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const openButtons = document.querySelectorAll('.viewopen');
+        const closeButtons = document.querySelectorAll('.close');
+
+        openButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const popupId = button.getAttribute('data-popup-id');
+                const popup = document.getElementById(popupId);
+                popup.style.display = 'flex';
+            });
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const popupId = button.getAttribute('data-popup-id');
+                const popup = document.getElementById(popupId);
+                popup.style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', (event) => {
+            const openPopups = document.querySelectorAll('.popup');
+            openPopups.forEach(popup => {
+                if (event.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+<style>
+    .viewopen {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #ffd700;
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .popupcontent {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        position: relative;
+        width: 300px;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .buttons {
+        margin-top: 20px;
+    }
+
+    .addbutton {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .findbutton {
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+</style>
+</body>
+</html>

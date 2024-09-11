@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dash.css">
+    <title>Sponsor's Dashboard</title>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Sponsor</h1>
+            <nav>
+                <a href="/smain"><button>Profile</button></a>
+                <a href="/campaign"><button>Campaigns</button></a>
+                <a href="/sfind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <div class="adbutton" style="display: flex; position: relative; left: 85%;">
+                <a href="/addcampaign"><button>Add Campaign</button></a>
+            </div>
+            <h2>Welcome {{user.sname}}</h2>
+            <h3>Active Campaigns:</h3>
+            
+            <div class="campaignlist">
+                <div class="campaignitem">
+                    {% for c in camp %}
+                        <div class="campaign">
+                            <span class="heading">{{ c.cname }}</span>
+                            <button class="viewopen" data-popup-id="popup{{ c.campaignid }}">View</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Popup content -->
+    {% for c in camp %}
+        <div class="popup" id="popup{{ c.campaignid }}">
+            <div class="popupcontent">
+                <span class="close" data-popup-id="popup{{ c.campaignid }}">&times;</span>
+                <h2>Description</h2>
+                <p>Campaign ID: {{ c.campaignid }} <br>
+                    Campaign Name: {{ c.cname }} <br>
+                    Sponsor's Username: {{ c.sname }} <br>
+                    Influencer's Username: {{ c.iname }} <br>
+                    Budget: {{ c.budget }} <br>
+                    Description: {{ c.desc }} <br>
+                    Start Date: {{ c.startdate }} <br>
+                    End Date: {{ c.enddate }} <br>
+                    Status: {{ c.public }} <br>
+                    Job Type: {{ c.job }} <br>
+
+                </p>
+                <div class="buttons">
+                    <a href="/sfind2"><button class="addbutton" data-cid="{{ c.campaignid }}" data-sid="{{ user.sid }}" >Add Influencer</button></a>
+                    <form method="post" action="/cupdate">
+                        <a href="/cupdate"><button type="submit" name="update" value="{{ c.campaignid }}" class="update"> Update </button></a>
+                    </form>
+                    <form action="/campdelete" method="post">
+                        <a href="/campdelete"><button type="submit" name="delete" value="{{ c.campaignid }}" class="delete"> Delete</button></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const openButtons = document.querySelectorAll('.viewopen');
+            const closeButtons = document.querySelectorAll('.close');
+            const addButtons = document.querySelectorAll('.addbutton');
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'flex';
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'none';
+                });
+            });
+
+            window.addEventListener('click', (event) => {
+                const openPopups = document.querySelectorAll('.popup');
+                openPopups.forEach(popup => {
+                    if (event.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            });
+
+            addButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const cid = button.getAttribute('data-cid');
+                    const sid = button.getAttribute('data-sid');
+                    fetch('/add_campaign', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ cid: cid, sid: sid }),
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('choose influencer');
+                        } else {
+                            alert('Error adding campaign');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('Error adding campaign');
+                    });
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .campaign{
+            height: 20vh;
+            width: 20vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            
+        }
+        .heading {
+            font-size: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+        }
+        .campaignlist {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .campaignitem {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .campaign {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .viewopen {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffd700;
+        }
+    
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+    
+        .popupcontent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 300px;
+        }
+    
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    
+        .buttons {
+            margin-top: 20px;
+            display: ruby-text
+        }
+    
+        .addbutton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        
+        .update {
+            background-color: #a43fdb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .delete {
+            background-color: #ef0404;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        
+    </style>
+</body>
+</html>

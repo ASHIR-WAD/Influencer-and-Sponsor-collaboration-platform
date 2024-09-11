@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Campaigns</title>
+    <link rel="stylesheet" href="/static/style-login.css"> 
+</head>
+<body>
+    <h1>CAMPAIGNS</h1>
+    
+    <div class="signup" >
+        <p>Please fill in this form to create an campaign.</p>
+        <form action='/campdata' method='post'>
+            <label for="user-name">Sponsors Name</label>
+            <input type="text" placeholder="Enter your Name" required name='sname' >
+
+            <label for="camp-name">Campaign name</label>
+            <input type="text" placeholder="Enter your Campaign name" required name='cname'>
+
+            <label for="budget"><b>Budget</b></label>
+            <input type="number" placeholder="Enter Budget" required name='budget'>
+
+            <label for="desc"><b>Description</b></label>
+            <input type="text" placeholder="Enter Description"  required name='desc'>
+
+            <label for="job"><b>Job Category</b></label>
+            <input type="text" placeholder="Enter Job "  required name='job'>
+
+            <label for="date1"><b>Start Date</b></label>
+            <input type="date" placeholder="Enter start date "  required name='startdate'>
+
+            <label for="date2"><b>End Date</b></label>
+            <input type="date" placeholder="Enter end date "  required name='enddate'>
+
+            <div class="platform">
+                <label for="status">Status</label>
+                <p style="display: inline-block;">
+                <select name="state" class="social" >
+                    <option type="button" name='private' style="background-color:rgb(161, 99, 192);" value="0" >Private</option>
+                    <option type="button" name='public' style="background-color:rgb(161, 99, 192);" value="1" >Public</option>
+                </select>
+                </p>
+            </div>
+            
+            <div class="regis">
+                <button type="submit" onclick='callAlert("Thank You)")'>Register</button>
+                <script>
+                    function callAlert(msg){
+                        alert(msg)
+                    }
+                </script>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>

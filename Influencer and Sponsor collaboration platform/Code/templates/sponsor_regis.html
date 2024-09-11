@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor SignUp</title>
+    <link rel="stylesheet" href="/static/style-login.css"> 
+</head>
+<body>
+    <h1>Sponsor Registration</h1>
+    
+    <div class="signup" >
+        <p>Please fill in this form to create an account.</p>
+        <form action='/s_regis' method="post">
+            <label for="name">Name</label>
+            <input type="text" placeholder="Enter your Name" required name='namee'>
+
+            <label for="username">Username</label>
+            <input type="text" placeholder="Enter your username" required name='uname'>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email"  required name='email'>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password"  required name='psw'>
+
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="repsw" required>
+
+            <label for="work">Industry</label>
+            <input type="text" placeholder="Enter Industry" required name='industry'>
+
+            <label for="phone">Phone Number</label>
+            <input type="number" placeholder="Enter Phone number" required name='number'>
+
+            <div class="regis">
+                <button type="submit" onclick='callAlert("Thank You For Registration :)")'>Register</button>
+                <script>
+                    function callAlert(msg){
+                        alert(msg)
+                    }
+                </script>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>

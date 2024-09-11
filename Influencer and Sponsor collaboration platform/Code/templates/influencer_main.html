@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dash.css">
+    <title>Influencer's Dashboard</title>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Influencer</h1>
+            <nav>
+                <a href="/imain"><button>Profile</button></a>
+                <a href="/ifind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome {{user.iname}}</h2>
+            <div class="buttons">
+                <a href="/iupdate"><button class="addbutton">Update profile</button></a>
+            </div>
+            <h3>Active Campaigns:</h3>
+            <div class="campaignlist">
+                <table>
+                {% for c in camp %}
+                    <tr>
+                        <td>
+                            <div class="campaign">
+                                <span>{{c.cname}}</span>
+                                <button class="viewopen" data-popup-id="popup-camp-{{ c.campaignid }}">View</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+                
+            </div>
+
+            <h3>Negotiations:</h3>
+            <div class="requeststatus">
+                <table>
+                {% for r in requested %}
+                    <tr>
+                        <td>
+                            <div class="requests">
+                                <span>Campaign Name : {{ r.cname }}</span>
+                                <form action="/requestupdate" method="post">
+                                    <button class="accept" type="submit" name="status" value="accepted,{{user.inid}},{{r.reqid}},i">Accept</button>
+                                    <button class="reject" type="submit" name="status" value="rejected,{{user.inid}},{{r.reqid}},i">Reject</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+
+            <h3>Requests</h3>
+            <div class="requestlist">
+                <table>
+                    {% for r in request %}
+                        <tr>
+                            <td>
+                                <div class="request">
+                                    <span>{{ r.sname }}</span>
+                                    <div>
+                                        <button class="viewopen" data-popup-id="popup{{ r.reqid }}">View</button>
+                                        <form action="/requestupdate" method="post">
+                                            <button class="accept" type="submit" name="status" value="accepted,{{user.inid}},{{r.reqid}},i">Accept</button>
+                                            <button class="reject" type="submit" name="status" value="rejected,{{user.inid}},{{r.reqid}},i">Reject</button>
+                                            <button class="negotiate" type="button" data-popup-id="negotiate-popup-{{ r.reqid }}">Negotiate</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </main>
+    </div>
+
+    {% for c in camp %}
+    <div class="popup" id="popup-camp-{{ c.campaignid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-camp-{{ c.campaignid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Campaign ID: {{ c.campaignid }} <br>
+                Campaign Name: {{ c.cname }} <br>
+                Sponsor's Username: {{ c.sname }} <br>
+                Influencer's Username: {{ c.iname }} <br>
+                Budget: {{ c.budget }} <br>
+                Description: {{ c.desc }} <br>
+                Start Date: {{ c.startdate }} <br>
+                End Date: {{ c.enddate }} <br>
+                Job Type: {{ c.job }} <br>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for rc in request_campaigns %}
+<div class="popup" id="popup{{ rc.request.reqid }}">
+    <div class="popupcontent">
+        <span class="close" data-popup-id="popup{{ rc.request.reqid }}">&times;</span>
+        <h2>Request and Campaign Details</h2>
+        <p>
+            Campaign ID: {{ rc.campaign.campaignid }} <br>
+            Campaign Name: {{ rc.campaign.cname }} <br>
+            Sponsor's Username: {{ rc.campaign.sname }} <br>
+            Budget: {{ rc.campaign.budget }} <br>
+            Description: {{ rc.campaign.desc }} <br>
+            Start Date: {{ rc.campaign.startdate }} <br>
+            End Date: {{ rc.campaign.enddate }} <br>
+            Job Type: {{ rc.campaign.job }} <br>
+        </p>
+    </div>
+</div>
+{% endfor %}
+
+
+    {% for r in request %}
+    <div class="popup" id="negotiate-popup-{{ r.reqid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="negotiate-popup-{{ r.reqid }}">&times;</span>
+            <h2>Negotiate</h2>
+            <form action="/negotiate" method="post">
+                <textarea name="message" placeholder="Enter your negotiation message here..." required></textarea>
+                <input type="hidden" name="request_id" value="{{ r.reqid }}">
+                <button type="submit" class="negbutton">Send Negotiation</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const openButtons = document.querySelectorAll('.viewopen, .negotiate');
+        const closeButtons = document.querySelectorAll('.close');
+
+        openButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const popupId = button.getAttribute('data-popup-id');
+                const popup = document.getElementById(popupId);
+                if (popup) {
+                    popup.style.display = 'flex';
+                }
+            });
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const popupId = button.getAttribute('data-popup-id');
+                const popup = document.getElementById(popupId);
+                if (popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
+
+        window.addEventListener('click', (event) => {
+            const openPopups = document.querySelectorAll('.popup');
+            openPopups.forEach(popup => {
+                if (event.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
+    });
+    </script>
+    <style>
+    .viewopen, .negotiate {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .viewopen {
+        background-color: #ffd700;
+        color: black;
+    }
+
+    .negbutton {
+        background-color: black;
+    }
+
+    .negotiate {
+        background-color: #ff9800; 
+    }
+
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .popupcontent {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        position: relative;
+        width: 300px;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .addbutton {
+        background-color: #4CAF50;
+    }
+
+    .findbutton {
+        background-color: #2196F3;
+    }
+
+    .accept {
+        background-color: #4CAF50;
+    }
+
+    .reject {
+        background-color: #f20707;
+    }
+    </style>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find</title>
+    <link rel="stylesheet" href="/static/dash.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Sponsor's Dashboard</h1>
+            <nav>
+                <a href="/smain"><button>Info</button></a>
+                <a href="/campaign"><button>Campaigns</button></a>
+                <a href="/sfind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome {{user.sname}}</h2>
+            <form action="/search_influencer" method="GET">
+                <input type="text" name="query" placeholder="Search for influencers....">
+                <button type="submit">Search</button>
+            </form>
+        
+            {% if influencers %}
+                <ul>
+                    {% for influencer in influencers %}
+                        <li> Influencer's Name : {{ influencer.iname }}   Email : {{ influencer.email }}     Platform :  {{ influencer.platform }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+    
+</body>
+</html>

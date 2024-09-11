@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Campaign</title>
+    <link rel="stylesheet" href="/static/style-login.css">
+</head>
+<body>
+    <h1>Update Your Campaign</h1>
+    
+    <div class="update">
+        <p>Update your profile information below:</p>
+        <form action='/updatecampaign' method='post'>
+            <label for="camp-name">Campaign name</label>
+            <input type="text" placeholder="Enter your Campaign name"  name='cname'>
+            
+            
+
+            <label for="budget"><b>Budget</b></label>
+            <input type="number" placeholder="Enter Budget"  name='budget'>
+
+            <label for="desc"><b>Description</b></label>
+            <input type="text" placeholder="Enter Description"   name='desc'>
+
+            <label for="job"><b>Job Category</b></label>
+            <input type="text" placeholder="Enter Job "   name='job'>
+
+            <label for="date1"><b>Start Date</b></label>
+            <input type="date" placeholder="Enter start date "   name='startdate'>
+
+            <label for="date2"><b>End Date</b></label>
+            <input type="date" placeholder="Enter end date "   name='enddate'>
+
+
+            <div class="platform">
+                <label for="status">Status</label>
+                <p style="display: inline-block;">
+                <select name="state" class="social" >
+                    <option type="button" name='private' style="background-color:rgb(161, 99, 192);" value="0" >Private</option>
+                    <option type="button" name='public' style="background-color:rgb(161, 99, 192);" value="1" >Public</option>
+                </select>
+                </p>
+            </div>
+            
+            
+            
+            
+            
+            <div class="updatee">
+                <a href="imain"><button type="submit" name="cdata" value="{{ cid }}" >Update </button></a>
+            </div>
+        </form>
+    </div>
+
+    
+</body>
+</html>

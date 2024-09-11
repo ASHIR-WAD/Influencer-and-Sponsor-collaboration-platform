@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+
+
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #49a7ff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard {
+    
+    
+    width: 100%;
+    height: 100vh;
+    padding: 2rem;
+}
+
+header {
+    border: 5px solid rgb(255, 255, 255);
+    border-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: white;
+    padding: 5px 4px 4px 5px;
+    margin-top: 5vh;
+}
+
+h1 {
+    margin: 0;
+    color: #4a4a4a;
+}
+
+nav button {
+    background-color: #6e8efb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav button:hover, nav button.active {
+    background-color: #a777e3;
+}
+
+h2, h3 {
+    color: #4a4a4a;
+}
+
+.campaign, .flagged, .request ,.list , .requests {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    width: 90vh;
+}
+
+.campaign:hover, .flagged:hover, .request:hover, .list:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view {
+    background-color: #ffd700;
+    color: #4a4a4a;
+}
+
+.flag, .req {
+    background-color: #07ffffe3;
+    color: #0f0e0e;
+}
+
+
+.remove {
+    background-color: #ff6b6b;
+    color: white;
+    margin-left: 0.5rem;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.campaign, .flagged, .request, .list{
+    animation: fadeIn 0.5s ease-out forwards;
+}
+.campaignlist, .requestlist, .flaggedlist, .viewpiont {
+    overflow-y: scroll; 
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* ------------------------------------ */
+.bar{
+    right: 40px;
+    text-align:right;
+    position: absolute;
+    top: -13px;
+}
+
+.searchbar input[type=text] {
+    float: right;
+    padding: 6px;
+    border-style:groove ;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    background:  url("/static/searchicon.png" ) 10px;
+}

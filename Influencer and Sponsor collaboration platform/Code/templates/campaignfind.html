@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find</title>
+    <link rel="stylesheet" href="/static/dash.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Sponsor's Dashboard</h1>
+            <nav>
+                <a href="/smain"><button>Info</button></a>
+                <a href="/campaign"><button>Campaigns</button></a>
+                <a href="/sfind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome {{user.sname}}</h2>
+            
+            <br>
+            <div class="viewpoint">
+                <h3>All Influencers</h3>
+                <table>
+                    {% for i in influ %}
+                        <tr>
+                            <td>
+                                <div class="list">
+                                    <span>{{ i.iname }}</span>
+                                    <div>
+                                        <button class="viewopen" data-popup-id="popup{{ i.inid }}">View</button>
+                                        <button class="req" data-inid="{{ i.inid }}" data-sid="{{ user.sid }}">Request</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Popup content -->
+    {% for i in influ %}
+        <div class="popup" id="popup{{ i.inid }}">
+            <div class="popupcontent">
+                <span class="close" data-popup-id="popup{{ i.inid }}">&times;</span>
+                <h2>Description</h2>
+                <p>
+                    Influencer Name : {{ i.iname }} <br>
+                    Email : {{ i.email }} <br>
+                    Platform : {{ i.platform }}  <br>
+                    Reach : {{ i.reach }}  <br>                    
+                </p>
+                
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const openButtons = document.querySelectorAll('.viewopen');
+            const closeButtons = document.querySelectorAll('.close');
+            const requestButtons = document.querySelectorAll('.req');
+            const addButtons = document.querySelectorAll('.addbutton');
+            const findButtons = document.querySelectorAll('.findbutton');
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'flex';
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'none';
+                });
+            });
+
+            window.addEventListener('click', (event) => {
+                const openPopups = document.querySelectorAll('.popup');
+                openPopups.forEach(popup => {
+                    if (event.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            });
+
+            requestButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const inid = button.getAttribute('data-inid');
+                    const sid = button.getAttribute('data-sid');
+                    fetch('/request_influencer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ inid: inid, sid: sid }),
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('Request sent successfully');
+                        } else {
+                            alert('Error sending request');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('Error sending request');
+                    });
+                });
+            });
+
+            addButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const cid = button.getAttribute('data-cid');
+                    const sid = button.getAttribute('data-sid');
+                    fetch('/add_campaign', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ cid: cid, sid: sid }),
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('Campaign added successfully');
+                        } else {
+                            alert('Error adding campaign');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('Error adding campaign');
+                    });
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .viewopen {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ffd700;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popupcontent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 300px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .addbutton, .findbutton {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            margin: 5px;
+        }
+
+        .addbutton {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .findbutton {
+            background-color: #2196F3;
+            color: white;
+        }
+    </style>
+</body>
+</html>

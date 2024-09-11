@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Influencer Profile</title>
+    <link rel="stylesheet" href="/static/style-login.css">
+</head>
+<body>
+    <h1>Update Your Influencer Profile</h1>
+    
+    <div class="update">
+        <p>Update your profile information below:</p>
+        <form action='/updateprofile' method='post'>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your Name" name='namee' >
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter Email" name='email' >
+            
+            <label for="new-password">New Password (leave blank if unchanged)</label>
+            <input type="password" id="new-password" placeholder="Enter New Password" name='psw'>
+            
+            <label for="confirm-password">Confirm New Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm New Password" name='repsw'>
+            
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter Phone number" name='number' >
+            
+            <div class="platform">
+                <label for="social">Platform</label>
+                <select name="social" id="social" class="social">
+                    <option value="Instagram">Instagram</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="Youtube">Youtube</option>
+                </select>
+            </div>
+            
+            <label for="followers">Reach/Followers</label>
+            <input type="number" id="followers" name='followers' placeholder="Enter your reach" >
+            
+            <div class="updatee">
+                <a href="imain"><button type="submit"  >Update Profile</button></a>
+            </div>
+        </form>
+    </div>
+
+    
+</body>
+</html>

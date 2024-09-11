@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dash.css">
+    <title>Admin's Dashboard</title>
+    <style>
+        .viewopen {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ffd700;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .popupcontent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 300px;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .addbutton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .findbutton {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flagged, .campaign {
+            height: 6vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Admin's Dashboard</h1>
+            <nav>
+                <a href="/adminhome"><button>Info</button></a>
+                <a href="/adminfind"><button>Find</button></a>
+                <a href="/adminstatistics"><button>Stats</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome Admin</h2>
+            <h3>Ongoing Campaigns:</h3>
+
+            <div class="campaignlist">
+                <table>
+                    {% for c in camp %}
+                    <tr>
+                        <td>
+                            <div class="campaign">
+                                <span>{{ c.cname }}</span>
+                                <button class="viewopen" data-popup-id="popup-camp-{{ c.campaignid }}">View</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <h3>Flagged Users/Campaigns</h3>
+            <div class="flaggedlist">
+                <table>
+                    {% for f in iflag %}
+                    <tr>
+                        <td>
+                            <div class="flagged">
+                                <span>INFLUENCER : {{ f.iname }}</span>
+                                <div style="display: inline-flex;">
+                                    <button class="viewopen" data-popup-id="popup-iflag-{{ f.inid }}">View</button>
+                                    <form action="/flag" method="post">
+                                        <button type="submit" class="remove" name="flagvalue" value="0,{{ f.usename }}">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% for f in sflag %}
+                    <tr>
+                        <td>
+                            <div class="flagged">
+                                <span>SPONSOR : {{ f.sname }}</span>
+                                <div style="display: inline-flex;">
+                                    <button class="viewopen" data-popup-id="popup-sflag-{{ f.sid }}">View</button>
+                                    <form action="/flag" method="post">
+                                        <button type="submit" class="remove" name="flagvalue" value="0,{{ f.usename }}">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% for f in cflag %}
+                    <tr>
+                        <td>
+                            <div class="flagged">
+                                <span>CAMPAIGN : {{ f.cname }}</span>
+                                <div style="display: inline-flex;">
+                                    <button class="viewopen" data-popup-id="popup-cflag-{{ f.campaignid }}">View</button>
+                                    <form action="/flag" method="post">
+                                        <button type="submit" class="remove" name="flagvalue" value="0,{{ f.campaignid }}">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- pop up part -->
+    {% for c in camp %}
+    <div class="popup" id="popup-camp-{{ c.campaignid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-camp-{{ c.campaignid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Campaign ID: {{ c.campaignid }} <br>
+                Campaign Name: {{ c.cname }} <br>
+                Sponsor's Username: {{ c.sname }} <br>
+                Influencer's Username: {{ c.iname }} <br>
+                Budget: {{ c.budget }} <br>
+                Description: {{ c.desc }} <br>
+                Start Date: {{ c.startdate }} <br>
+                End Date: {{ c.enddate }} <br>
+                Status: {{ c.public }} <br>
+                Job Type: {{ c.job }} <br>
+            </p>
+            <div class="buttons">
+                
+                <a href="/adminfind"><button class="findbutton">Find</button></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for f in iflag %}
+    <div class="popup" id="popup-iflag-{{ f.inid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-iflag-{{ f.inid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Influencer ID: {{ f.inid }} <br>
+                Influencer Name: {{ f.iname }} <br>
+                Influencer's Username: {{ f.usename }} <br>
+                Email: {{ f.email }} <br>
+                Phone Number: {{ f.number }} <br>
+                Platform: {{ f.platform }} <br>
+                Reach: {{ f.reach }} <br>
+            </p>
+            <div class="buttons">
+                <a href="/adminfind"><button class="findbutton">Find</button></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for f in sflag %}
+    <div class="popup" id="popup-sflag-{{ f.sid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-sflag-{{ f.sid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Sponsor ID: {{ f.sid }} <br>
+                Sponsor Name: {{ f.sname }} <br>
+                Sponsor's Username: {{ f.usename }} <br>
+                Email: {{ f.email }} <br>
+                Phone Number: {{ f.number }} <br>
+                Industry : {{f.industry}}
+            </p>
+            <div class="buttons">
+                <a href="/adminfind"><button class="findbutton">Find</button></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for f in cflag %}
+    <div class="popup" id="popup-cflag-{{ f.campaignid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-cflag-{{ f.campaignid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Campaign ID: {{ f.campaignid }} <br>
+                Campaign Name: {{ f.cname }} <br>
+                Sponsor's Username: {{ f.sname }} <br>
+                Influencer's Username: {{ f.iname }} <br>
+                Budget: {{ f.budget }} <br>
+                Description: {{ f.desc }} <br>
+                Start Date: {{ f.startdate }} <br>
+                End Date: {{ f.enddate }} <br>
+                Status: {{ f.public }} <br>
+                Job Type: {{ f.job }} <br>
+            </p>
+            <div class="buttons">
+                <a href="/adminfind"><button class="findbutton">Find</button></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const openButtons = document.querySelectorAll('.viewopen');
+            const closeButtons = document.querySelectorAll('.close');
+    
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'flex';
+                });
+            });
+    
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'none';
+                });
+            });
+    
+            window.addEventListener('click', (event) => {
+                const openPopups = document.querySelectorAll('.popup');
+                openPopups.forEach(popup => {
+                    if (event.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>    

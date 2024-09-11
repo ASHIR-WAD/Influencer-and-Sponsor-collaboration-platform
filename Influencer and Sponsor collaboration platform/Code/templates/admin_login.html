@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/style-login.css"> 
+</head>
+<body>
+    <h1>Admin Login</h1>
+    <div class="login" >
+        <form action='/adminlog' method="post">
+            <label>Username</label>
+            <input type="text" placeholder="Enter your Username" name='uname'>
+            <label>Password</label>
+            <input type="password" placeholder="Enter Your Password" name='psw'>
+            <div class="submit">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>

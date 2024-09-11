@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dash.css">
+    <title>Sponsor's Dashboard</title>
+    <style>
+        .viewopen {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ffd700;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popupcontent {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 300px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .addbutton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .findbutton {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flagged, .campaign {
+            height: 6vh;
+        }
+
+        .accept , .modify {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .reject {
+            background-color: #f20707;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .box {
+            display: contents;
+        }
+
+        .descbox, .budgetbox {
+            margin-bottom: 20px;
+        }
+    
+        .descbox label, .budgetbox label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+    
+        .descbox input, .budgetbox input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Sponsor</h1>
+            <nav>
+                <a href="/smain"><button>Profile</button></a>
+                <a href="/campaign"><button>Campaigns</button></a>
+                <a href="/sfind"><button>Find</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome {{user.sname}}</h2>
+            <h3>Active Campaigns:</h3>
+            <div class="campaignlist">
+                <table>
+                {% for c in activecamp %}
+                    <tr>
+                        <td>
+                            <div class="campaign">
+                                <span>{{c.cname}}</span>
+                                <button class="viewopen" data-popup-id="popup-camp-{{ c.campaignid }}">View</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+            <h3>Negotiations:</h3>
+            <div class="requeststatus">
+                <table>
+                {% for x in requested %}
+                    <tr>
+                        <td>
+                            <div class="requests">
+                                <span>Influencer Name : {{x.iname}}</span>
+                                <span>Campaign Name : {{ x.cname }}</span>
+                                <span>Message : {{ x.msg }}</span>
+                                <form action="/delreq" method="post">
+                                    <button type="submit" name="delete" value="{{ x.reqid }}" class="reject">Delete</button>
+                                </form>
+                                <button class="modify" data-popup-id="modify-popup-{{ x.reqid }}">Modify</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+
+            <h3>Requests</h3>
+            <div class="requestlist">
+                <table>
+                    {% for r in request %}
+                        <tr>
+                            <td>
+                                <div class="request">
+                                    <span>{{ r.iname }}</span>
+                                    <div class="box">
+                                        <button class="viewopen" data-popup-id="popup{{ r.reqid }}">View</button>
+                                        <form action="/requestupdate" method="post">
+                                            <div class="req_action">
+                                                <button class="accept" type="submit" name="status" value="accepted,{{user.inid}},{{r.reqid}},s">Accept</button>
+                                                <button class="reject" type="submit" name="status" value="rejected,{{user.inid}},{{r.reqid}},s">Reject</button>
+                                                
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- pop up part -->
+    {% for c in activecamp %}
+    <div class="popup" id="popup-camp-{{ c.campaignid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup-camp-{{ c.campaignid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Campaign ID: {{ c.campaignid }} <br>
+                Campaign Name: {{ c.cname }} <br>
+                Sponsor's Username: {{ c.sname }} <br>
+                Influencer's Username: {{ c.iname }} <br>
+                Budget: {{ c.budget }} <br>
+                Description: {{ c.desc }} <br>
+                Start Date: {{ c.startdate }} <br>
+                End Date: {{ c.enddate }} <br>
+                Status: {{ c.public }} <br>
+                Job Type: {{ c.job }} <br>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for r in request %}
+    <div class="popup" id="popup{{ r.reqid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="popup{{ r.reqid }}">&times;</span>
+            <h2>Description</h2>
+            <p>
+                Request Id : {{ r.reqid }} <br>
+                Influencer Name : {{ r.iname }}  <br>
+                Campaign Name : {{ r.cname }}   <br>
+                Budget : {{ r.budget }} <br>
+                Description : {{ r.desc }} <br>
+                Start Date : {{ r.startdate }}  <br>
+                End Date : {{ r.enddate }} <br>
+                Job : {{ r.job }} 
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    
+    {% for x in requested %}
+    <div class="popup" id="modify-popup-{{ x.reqid }}">
+        <div class="popupcontent">
+            <span class="close" data-popup-id="modify-popup-{{ x.reqid }}">&times;</span>
+            <h2>Modify Request</h2>
+            <form action="/modrequest" method="post">
+                <div class="modifymain">
+                    <input type="hidden" name="reqid" value="{{ x.reqid }}">
+                    
+                    <div class="descbox">
+                        <label for="desc-{{ x.reqid }}">Description:</label>
+                        <input type="text" name="desc" id="desc-{{ x.reqid }}" placeholder="Enter new description">
+                    </div><br>
+                    <div class="budgetbox">
+                        <label for="budget-{{ x.reqid }}">Budget:</label>
+                        <input type="number" name="budget" id="budget-{{ x.reqid }}" placeholder="Enter new budget">
+                    </div><br>
+                    <button type="submit">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const openButtons = document.querySelectorAll('.viewopen, .modify');
+            const closeButtons = document.querySelectorAll('.close');
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'flex';
+                });
+            });
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const popupId = button.getAttribute('data-popup-id');
+                    const popup = document.getElementById(popupId);
+                    popup.style.display = 'none';
+                });
+            });
+
+            window.addEventListener('click', (event) => {
+                const openPopups = document.querySelectorAll('.popup');
+                openPopups.forEach(popup => {
+                    if (event.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

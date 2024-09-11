@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanalei+Fill&display=swap');
+
+
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    background: #a8c0ff;  
+    background: -webkit-linear-gradient(to bottom, #46339d, #8dabf7);  
+    background: linear-gradient(to bottom, #49369e, #84a5f8);
+    flex-direction: column;
+    margin: 0;
+
+}
+
+h1 {
+   font-family: "Hanalei Fill", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  color: #ddd;
+}
+
+button {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #313ef7;
+    width: 100%;
+    font-size: 16px;
+}
+
+label {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+}
+
+.login {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 500px;
+    text-align: center;
+    
+}
+
+input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.form{
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    font-size: 18px;
+}
+
+.signup , .update {
+    background-color: white;
+    width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.social{
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color:rgb(123, 34, 168);
+    width: 100%;
+    font-size: 16px;
+    display: inline-flex;
+}
+
+

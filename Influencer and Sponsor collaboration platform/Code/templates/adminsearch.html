@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find</title>
+    <link rel="stylesheet" href="/static/dash.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Admin's Dashboard</h1>
+            <nav>
+                <a href="/adminhome"><button>Info</button></a>
+                <a href="/adminfind"><button>Find</button></a>
+                <a href="/adminstatistics"><button>Stats</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </nav>
+        </header>
+        <main>
+            <h2>Welcome Admin</h2>
+            <form action="/search_admin" method="GET">
+                <input type="text" name="query" placeholder="Search here....">
+                <button type="submit">Search</button>
+            </form>
+            <h3>Searched Sponsors</h3>
+            {% if sponsors %}
+                <ul>
+                    {% for sponsor in sponsors %}
+                        <li>Sponsor's Name : {{ sponsor.sname }} - Industry : {{ sponsor.industry }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <h3>Searched Campaigns </h3>
+            {% if campaigns %}
+                <ul>
+                    {% for campaign in campaigns %}
+                        <li>Campaign's Name : {{ campaign.cname }} Sponsor's Username : {{ campaign.sname }} Job : {{ campaign.job }} Budget : {{ campaign.budget }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <h3>Searched Influencers</h3>
+            {% if influencers %}
+                <ul>
+                    {% for influencer in influencers %}
+                        <li> Influencer's Name : {{ influencer.iname }}   Email : {{ influencer.email }}     Platform :  {{ influencer.platform }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </main>
+    </div>
+
+
+
+
+</body>
+</html>

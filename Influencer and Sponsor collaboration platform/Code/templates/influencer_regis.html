@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer SignUp</title>
+    <link rel="stylesheet" href="/static/style-login.css"> 
+</head>
+<body>
+    <h1>Influencer Registration</h1>
+    
+    <div class="signup" >
+        <p>Please fill in this form to create an account.</p>
+        <form action='/i_regis' method='post'>
+            <label for="name">Name</label>
+            <input type="text" placeholder="Enter your Name" required name='namee' >
+
+            <label for="username">Username</label>
+            <input type="text" placeholder="Enter your username" required name='username'>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" required name='email'>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password"  required name='psw'>
+
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password"  required name='repsw'>
+
+            <label for="phone">Phone Number</label>
+            <input type="number" placeholder="Enter Phone number" required name='number'>
+
+            <div class="platform">
+                <label for="media">Platform</label>
+                <p style="display: inline-block;">
+                <select name="social" class="social" >
+                    <option type="button" name='Instagram' style="background-color:rgb(161, 99, 192);" >Instagram</option>
+                    <option type="button" name='Twitter' style="background-color:rgb(161, 99, 192);" >Twitter</option>
+                    <option type="button" name='Youtube' style="background-color:rgb(161, 99, 192);" >Youtube</option>
+                </select>
+                </p>
+            </div>
+            <label for="reach">Reach/Followers</label>
+            <input type="number" name='followers' placeholder="Enter your reach" required>
+            <div class="regis">
+                <button type="submit" onclick='callAlert("Thank You For Registration :)")'>Register</button>
+                <script>
+                    function callAlert(msg){
+                        alert(msg)
+                    }
+                </script>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>
